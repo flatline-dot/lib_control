@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'lib_app.apps.LibAppConfig'
 ]
 
 MIDDLEWARE = [
@@ -75,8 +76,15 @@ WSGI_APPLICATION = 'lib_control.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'qsdthusr',
+        'USER': 'qsdthusr',
+        'PASSWORD': 'GUWjdpFXSOyFvuHZxKoYXckIk0_1cqUI',
+        "HOST": 'balarama.db.elephantsql.com',
+        'PORT': '5432',
+        'OPTIONS': {
+            'options': '-c search_path=lib_control'
+        }
     }
 }
 
