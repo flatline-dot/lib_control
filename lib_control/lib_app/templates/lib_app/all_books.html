@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class='container-sm'>
+
+        <div class="row">
+       <div class="col-3">
+            Наименование
+        </div>
+
+       <div class="col-2">
+            Автор
+        </div>
+
+       <div class="col-2">
+             Жанр
+        </div>
+       <div class="col-1">
+             Читают
+        </div>
+       <div class="col-1">
+             Резерв
+        </div>
+       <div class="col-1">
+             В наличии
+        </div>
+
+    </div>
+</div>
+
+<div class='container'>
+
+        {% for book in object_list %}
+
+           <div class="row">
+               <div class="col-3">
+                    {{ book.book_title }}
+                </div>
+
+               <div class="col-2">
+                    {{ book.book_author }}
+                </div>
+
+               <div class="col-2">
+                     {{ book.book_genre }}
+                </div>
+               <div class="col-1">
+                     {{ book.reading_set.all.count }}
+                </div>
+               <div class="col-1">
+                     {{ book.reserve_set.all.count }}
+                </div>
+               <div class="col-1">
+                     {{ book.available_count }}
+                </div>
+               <div class="col-1">
+                    <div class="row">
+                        <a href="#">Выдача</a>
+                        <a href="#">Возврат</a>
+                    </div>
+               </div>
+
+              <div class="col-1">
+                <a href="#">Резерв</a>
+               </div>
+            </div>
+        {% endfor %}
+</div>
+{% endblock %}
+
