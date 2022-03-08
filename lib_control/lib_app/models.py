@@ -8,6 +8,9 @@ class Title(models.Model):
     def __str__(self):
         return f'{self.name_book}'
 
+    class Meta:
+        ordering = ['name_book']
+
 
 class Author(models.Model):
     author_book = models.CharField(max_length=50, unique=True)
@@ -15,12 +18,18 @@ class Author(models.Model):
     def __str__(self):
         return f'{self.author_book}'
 
+    class Meta:
+        ordering = ['author_book']
+
 
 class Genre(models.Model):
     genre_book = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return f'{self.genre_book}'
+
+    class Meta:
+        ordering = ['genre_book']
 
 
 class Book(models.Model):
@@ -34,6 +43,9 @@ class Book(models.Model):
 
     def __str__(self):
         return f'{self.book_title}-{self.book_author}'
+
+    class Meta:
+        ordering = ['book_title']
 
 
 class Reading(models.Model):
