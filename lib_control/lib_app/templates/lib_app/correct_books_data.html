@@ -2,49 +2,66 @@
 {% block correct %}
 
 <form action="{% url 'correct' %}" method="get">
-<select name="select"> <!--Supplement an id here instead of using 'name'-->
-  <option disabled selected value>Сортировать по:</option>
+    <select name="select"> <!--Supplement an id here instead of using 'name'-->
+      <option disabled selected value>Сортировать по:</option>
+          {% for key, value_ in sort_options.items %}
+             {% if choice_sort_options == key%}
+                <option value={{ key }} selected>{{ value_ }}</option>
+            {% else %}
+                <option value={{ key }}>{{ value_ }}</option>
+            {% endif %}
+          {% endfor %}
+    </select>
 
-  {% for key, value_ in sort_options.items %}
-     {% if choice_sort_options == key%}
-        <option value={{ key }} selected>{{ value_ }}</option>
+    <select name="search_select"> <!--Supplement an id here instead of using 'name'-->
+      <option disabled selected value>Искать по:</option>
+          {% for key, value_ in search_options.items %}
+             {% if choice_search_options == key%}
+                <option value={{ key }} selected>{{ value_ }}</option>
+            {% else %}
+                <option value={{ key }}>{{ value_ }}</option>
+            {% endif %}
+          {% endfor %}
+    </select>
+    {% if search_query %}
+        <input type="text" name="search_query" value="{{ search_query }}">
     {% else %}
-        <option value={{ key }}>{{ value_ }}</option>
+        <input type="text" name="search_query" value="">
     {% endif %}
-  {% endfor %}
-</select>
-<button type="submit">Сортировать</button>
+    <button type="submit">Применить</button>
 </form>
-<a href="{% url 'correct' %}">Сброс</a>
-    {% for book in object_list %}
-       <div class="row">
-           <div class="col-3">
-                {{ book.book_title }}
-            </div>
 
-           <div class="col-2">
-                {{ book.book_author }}
-            </div>
+<a href="{% url 'correct' %}">Отчистить все</a>
 
-           <div class="col-2">
-                 {{ book.book_genre }}
+{% for book in object_list %}
+   <div class="row">
+       <div class="col-3">
+            {{ book.book_title }}
+        </div>
+
+       <div class="col-2">
+            {{ book.book_author }}
+        </div>
+
+       <div class="col-2">
+             {{ book.book_genre }}
+        </div>
+       <div class="col-1">
+             {{ book.reading_set.all.count }}
+        </div>
+       <div class="col-1">
+             {{ book.available_count }}
+        </div>
+       <div class="col-1">
+            <div class="row">
+                <a href="#">Редактировать данные</a>
             </div>
-           <div class="col-1">
-                 {{ book.reading_set.all.count }}
-            </div>
-           <div class="col-1">
-                 {{ book.available_count }}
-            </div>
-           <div class="col-1">
-                <div class="row">
-                    <a href="#">Редактировать данные</a>
-                </div>
-           </div>
-           <div class="col-1">
-                <div class="row">
-                    <a href="#">Изменить количество</a>
-                </div>
-           </div>
        </div>
-    {% endfor %}
+       <div class="col-1">
+            <div class="row">
+                <a href="#">Изменить количество</a>
+            </div>
+       </div>
+   </div>
+{% endfor %}
 {% endblock %}
