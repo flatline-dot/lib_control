@@ -1,5 +1,6 @@
-from django.views.generic import ListView, TemplateView
-from .models import Book
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, TemplateView, CreateView, UpdateView
+from .models import Book, Author, Genre, Title
 
 sort_options = {
     'book_title': 'Книги по алфавиту',
@@ -32,8 +33,8 @@ class ManagementBooks(TemplateView):
     template_name = 'lib_app/management.html'
 
 
-class CorrectBooksData(AllBooks):
-    template_name = 'lib_app/correct_books_data.html'
+class Redaction(AllBooks):
+    template_name = 'lib_app/redaction.html'
 
     def get_queryset(self):
         queryset = True
@@ -60,4 +61,49 @@ class CorrectBooksData(AllBooks):
         context['search_options'] = search_options
         context['choice_search_options'] = self.request.GET.get('search_select')
         context['search_query'] = self.request.GET.get('search_query')
+        return context
+
+
+class CorrectBook(UpdateView):
+    model = Book
+    fields = '__all__'
+    template_name = 'lib_app/correct_book.html'
+
+
+class CreateAuthor(CreateView):
+    model = Author
+    fields = '__all__'
+    template_name = 'lib_app/create_author.html'
+
+    def get_success_url(self, *args):
+        return reverse_lazy('correct_book', args=(self.kwargs.get('pk'),))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book_pk'] = self.kwargs.get('pk')
+        return context
+
+
+class CreateGenre(CreateView):
+    model = Genre
+    fields = '__all__'
+    template_name = 'lib_app/create_genre.html'
+
+    def get_success_url(self, *args):
+        return reverse_lazy('correct_book', args=(self.kwargs.get('pk'),))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book_pk'] = self.kwargs.get('pk')
+        return context
+
+
+class CorrectTitle(UpdateView):
+    model = Title
+    fields = '__all__'
+    template_name = 'lib_app/correct_title.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
         return context

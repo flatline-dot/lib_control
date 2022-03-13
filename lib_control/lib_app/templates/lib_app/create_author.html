@@ -1,0 +1,6 @@
+<form action="{% url 'create_author' book_pk %}" method="post">
+    {{ object }}
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>

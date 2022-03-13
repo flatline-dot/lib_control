@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import ModelForm
+from django.urls import reverse
 
 
 class Title(models.Model):
@@ -14,6 +16,9 @@ class Title(models.Model):
 
 class Author(models.Model):
     author_book = models.CharField(max_length=50, unique=True)
+
+    def get_absolute_url(self):
+        return reverse('correct_book')
 
     def __str__(self):
         return f'{self.author_book}'
@@ -43,6 +48,9 @@ class Book(models.Model):
 
     def __str__(self):
         return f'{self.book_title}-{self.book_author}'
+
+    def get_absolute_url(self):
+        return reverse('correct_book', kwargs={'pk': self.pk})
 
     class Meta:
         ordering = ['book_title']
@@ -76,3 +84,5 @@ class Ban(models.Model):
 
     def __str__(self):
         return f'{self.reading_id}, {self.user_id}'
+
+

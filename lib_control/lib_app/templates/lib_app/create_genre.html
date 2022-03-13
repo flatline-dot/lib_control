@@ -1,0 +1,5 @@
+<form action="{% url 'create_genre' book_pk %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>

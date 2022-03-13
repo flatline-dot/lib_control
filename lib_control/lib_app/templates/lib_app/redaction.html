@@ -1,7 +1,7 @@
 {% extends 'lib_app/management.html' %}
 {% block correct %}
 
-<form action="{% url 'correct' %}" method="get">
+<form action="{% url 'redaction' %}" method="get">
     <select name="select"> <!--Supplement an id here instead of using 'name'-->
       <option disabled selected value>Сортировать по:</option>
           {% for key, value_ in sort_options.items %}
@@ -31,7 +31,7 @@
     <button type="submit">Применить</button>
 </form>
 
-<a href="{% url 'correct' %}">Отчистить все</a>
+<a href="{% url 'redaction' %}">Отчистить все</a>
 
 {% for book in object_list %}
    <div class="row">
@@ -54,7 +54,7 @@
         </div>
        <div class="col-1">
             <div class="row">
-                <a href="#">Редактировать данные</a>
+                <a href="{% url 'correct_book' book.pk %}">Редактировать данные</a>
             </div>
        </div>
        <div class="col-1">

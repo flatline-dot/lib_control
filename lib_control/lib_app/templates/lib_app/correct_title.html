@@ -1,0 +1,6 @@
+<form action="{% url 'correct_title' object.pk %}" method="post">
+    {{ context }}
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
