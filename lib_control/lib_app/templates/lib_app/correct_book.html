@@ -14,7 +14,17 @@
     <div class="col-1">
         <a href="{% url 'create_genre' book.pk %}">Создать</a>
     </div>
-        <div class="col-1">
-        <a href="{% url 'correct_title' book.pk %}">Редактировать</a>
+    <div class="col-1">
+        <a href="{% url 'correct_title' pk=book.book_title_id book_pk=book.pk %}">Редактировать название</a>
     </div>
+
+    <div class="col-1">
+        <a href="{% url 'correct_genre' pk=book.book_genre_id book_pk=book.pk %}">Редактировать название жанра</a>
+    </div>
+
+    <div class="col-1">
+        <a href="{% url 'correct_author' pk=book.book_author_id book_pk=book.pk %}">Редактировать название автора</a>
+    </div>
+
+
 </div>

@@ -73,7 +73,7 @@ class CorrectBook(UpdateView):
 class CreateAuthor(CreateView):
     model = Author
     fields = '__all__'
-    template_name = 'lib_app/create_author.html'
+    template_name = 'lib_app/create_item.html'
 
     def get_success_url(self, *args):
         return reverse_lazy('correct_book', args=(self.kwargs.get('pk'),))
@@ -81,29 +81,47 @@ class CreateAuthor(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['book_pk'] = self.kwargs.get('pk')
+        context['action'] = 'create_author'
         return context
 
 
-class CreateGenre(CreateView):
+class CreateGenre(CreateAuthor):
     model = Genre
-    fields = '__all__'
-    template_name = 'lib_app/create_genre.html'
-
-    def get_success_url(self, *args):
-        return reverse_lazy('correct_book', args=(self.kwargs.get('pk'),))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['book_pk'] = self.kwargs.get('pk')
+        context['action'] = 'create_genre'
         return context
 
 
 class CorrectTitle(UpdateView):
     model = Title
     fields = '__all__'
-    template_name = 'lib_app/correct_title.html'
+    template_name = 'lib_app/correct_item.html'
+
+    def get_success_url(self, *args):
+        return reverse_lazy('correct_book', args=(self.kwargs.get('book_pk'),))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['action'] = 'correct_title'
+        context['book_pk'] = self.kwargs.get('book_pk')
+        return context
 
+
+class CorrectAuthor(CorrectTitle):
+    model = Author
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['action'] = 'correct_author'
+        return context
+
+
+class CorrectGenre(CorrectTitle):
+    model = Genre
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['action'] = 'correct_genre'
         return context
