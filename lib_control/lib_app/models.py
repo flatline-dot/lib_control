@@ -1,24 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.forms import ModelForm
 from django.urls import reverse
-
-
-class Title(models.Model):
-    name_book = models.CharField(max_length=50, unique=True)
-
-    def __str__(self):
-        return f'{self.name_book}'
-
-    class Meta:
-        ordering = ['name_book']
 
 
 class Author(models.Model):
     author_book = models.CharField(max_length=50, unique=True)
-
-    def get_absolute_url(self):
-        return reverse('correct_book')
+    slug = models.SlugField(max_length=50, allow_unicode=True, blank=True, unique=True, null=False)
 
     def __str__(self):
         return f'{self.author_book}'
@@ -29,6 +16,7 @@ class Author(models.Model):
 
 class Genre(models.Model):
     genre_book = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=50, allow_unicode=True, blank=True, unique=True, null=False)
 
     def __str__(self):
         return f'{self.genre_book}'
@@ -38,22 +26,24 @@ class Genre(models.Model):
 
 
 class Book(models.Model):
-    book_title = models.ForeignKey(Title, on_delete=models.CASCADE, null=False)
+    title = models.CharField(max_length=50, unique=True)
     book_author = models.ForeignKey(Author, on_delete=models.CASCADE, null=False)
     book_genre = models.ForeignKey(Genre, on_delete=models.CASCADE, null=False)
     book_amount = models.IntegerField()
+    slug = models.SlugField(max_length=50, allow_unicode=True, blank=True, unique=True, null=False)
 
     def available_count(self):
         return self.book_amount - self.reading_set.all().count() - self.reserve_set.all().count()
 
     def __str__(self):
-        return f'{self.book_title}-{self.book_author}'
+        return f'{self.title}-{self.book_author}'
 
     def get_absolute_url(self):
         return reverse('correct_book', kwargs={'pk': self.pk})
 
+
     class Meta:
-        ordering = ['book_title']
+        ordering = ['title']
 
 
 class Reading(models.Model):
@@ -84,5 +74,4 @@ class Ban(models.Model):
 
     def __str__(self):
         return f'{self.reading_id}, {self.user_id}'
-
 

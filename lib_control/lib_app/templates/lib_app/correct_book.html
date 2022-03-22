@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-2">
 
-        <form action="{% url 'correct_book' book.pk %}" method="post">
+        <form action="{% url 'correct_book' book.slug %}" method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Submit">
@@ -9,21 +9,18 @@
     </div>
 
     <div class="col-1">
-        <a href="{% url 'create_author' book.pk %}">Создать</a>
+        <a href="{% url 'create_author' %}" target="_blank">Создать</a>
     </div>
     <div class="col-1">
-        <a href="{% url 'create_genre' book.pk %}">Создать</a>
-    </div>
-    <div class="col-1">
-        <a href="{% url 'correct_title' pk=book.book_title_id book_pk=book.pk %}">Редактировать название</a>
+        <a href="{% url 'create_genre' %}" target="_blank">Создать</a>
     </div>
 
     <div class="col-1">
-        <a href="{% url 'correct_genre' pk=book.book_genre_id book_pk=book.pk %}">Редактировать название жанра</a>
+        <a href="{% url 'correct_genre' book.book_genre.slug %} " target="_blank">Редактировать название жанра</a>
     </div>
 
     <div class="col-1">
-        <a href="{% url 'correct_author' pk=book.book_author_id book_pk=book.pk %}">Редактировать название автора</a>
+        <a href="{% url 'correct_author' book.book_author.slug %}" target="_blank">Редактировать название автора</a>
     </div>
 
 

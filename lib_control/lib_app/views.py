@@ -1,10 +1,14 @@
-from django.urls import reverse, reverse_lazy
+from django.shortcuts import redirect
+from django.urls import reverse_lazy, reverse
+from django.utils.text import slugify
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView
-from .models import Book, Author, Genre, Title
+from .models import Book, Author, Genre
+from transliterate import translit
+
 
 sort_options = {
-    'book_title': 'Книги по алфавиту',
-    '-book_title': 'Книги в обратном порядке',
+    'title': 'Книги по алфавиту',
+    '-title': 'Книги в обратном порядке',
     'book_author': 'Авторы по алфавиту',
     '-book_author': 'Авторы в обратном порядке',
     'book_genre': 'Жанры по алфавиту',
@@ -12,13 +16,13 @@ sort_options = {
 }
 
 search_options = {
-    'book_title': 'По книгам',
+    'title': 'По книгам',
     'book_author': 'По авторам',
     'book_genre': 'По жанрам'
 }
 
 make_queries = {
-    'book_title': 'book_title__name_book',
+    'title': 'title',
     'book_author': 'book_author__author_book',
     'book_genre': 'book_genre__genre_book',
 }
@@ -66,51 +70,31 @@ class Redaction(AllBooks):
 
 class CorrectBook(UpdateView):
     model = Book
-    fields = '__all__'
+    fields = ['title', 'book_author', 'book_genre', 'book_amount']
     template_name = 'lib_app/correct_book.html'
+    success_url = reverse_lazy('redaction')
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.slug = slugify(translit(instance.title, reversed=True), allow_unicode=True)
+        instance.save()
+        return redirect(self.get_success_url())
 
 
-class CreateAuthor(CreateView):
+class CorrectAuthor(UpdateView):
     model = Author
-    fields = '__all__'
-    template_name = 'lib_app/create_item.html'
-
-    def get_success_url(self, *args):
-        return reverse_lazy('correct_book', args=(self.kwargs.get('pk'),))
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['book_pk'] = self.kwargs.get('pk')
-        context['action'] = 'create_author'
-        return context
-
-
-class CreateGenre(CreateAuthor):
-    model = Genre
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['action'] = 'create_genre'
-        return context
-
-
-class CorrectTitle(UpdateView):
-    model = Title
-    fields = '__all__'
+    fields = ['author_book']
     template_name = 'lib_app/correct_item.html'
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.slug = slugify(translit(self.object.author_book, reversed=True))
+        self.object.save()
+        slug = self.object.slug
+        return redirect(self.get_success_url(slug))
+
     def get_success_url(self, *args):
-        return reverse_lazy('correct_book', args=(self.kwargs.get('book_pk'),))
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['action'] = 'correct_title'
-        context['book_pk'] = self.kwargs.get('book_pk')
-        return context
-
-
-class CorrectAuthor(CorrectTitle):
-    model = Author
+        return reverse_lazy('correct_author', args=args)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -118,10 +102,73 @@ class CorrectAuthor(CorrectTitle):
         return context
 
 
-class CorrectGenre(CorrectTitle):
+class CorrectGenre(CorrectAuthor):
     model = Genre
+    fields = ['genre_book']
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.slug = slugify(translit(self.object.genre_book, reversed=True))
+        self.object.save()
+        slug = self.object.slug
+        return redirect(self.get_success_url(slug))
+
+    def get_success_url(self, *args):
+        return reverse_lazy('correct_genre', args=args)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['action'] = 'correct_genre'
         return context
+
+
+class CreateAuthor(CreateView):
+    model = Author
+    fields = ['author_book']
+    template_name = 'lib_app/create_item.html'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.slug = slugify(translit(self.object.author_book, reversed=True))
+        self.object.save()
+        return redirect(self.get_success_url())
+
+    def get_success_url(self, *args):
+        return reverse_lazy('create_author')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['action'] = 'create_author'
+        return context
+
+
+class CreateGenre(CreateAuthor):
+    model = Genre
+    fields = ['genre_book']
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.slug = slugify(translit(self.object.genre_book, reversed=True))
+        self.object.save()
+        return redirect(self.get_success_url())
+
+    def get_success_url(self, *args):
+        return reverse_lazy('create_genre')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['action'] = 'create_genre'
+        return context
+
+
+class NewBook(CreateView):
+    model = Book
+    fields = ['title', 'book_author', 'book_genre', 'book_amount']
+    template_name = 'lib_app/new_book.html'
+    success_url = reverse_lazy('manage')
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.slug = slugify(translit(self.object.title, reversed=True), allow_unicode=True)
+        self.object.save()
+        return redirect(self.get_success_url())
