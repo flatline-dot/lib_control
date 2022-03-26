@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
@@ -172,3 +173,4 @@ class NewBook(CreateView):
         self.object.slug = slugify(translit(self.object.title, reversed=True), allow_unicode=True)
         self.object.save()
         return redirect(self.get_success_url())
+

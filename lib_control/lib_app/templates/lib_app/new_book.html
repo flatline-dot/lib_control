@@ -1,0 +1,17 @@
+{% extends 'lib_app/management.html' %}
+{% block correct %}
+    <form action="{% url 'new_book' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+
+
+<div class="col-1">
+    <a href="{% url 'create_author' %}" target="_blank">Создать</a>
+</div>
+<div class="col-1">
+    <a href="{% url 'create_genre' %}" target="_blank">Создать</a>
+</div>
+
+{% endblock %}
