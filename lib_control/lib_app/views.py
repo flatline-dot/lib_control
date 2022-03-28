@@ -50,6 +50,9 @@ class Redaction(AllBooks):
 
         else:
             queryset = Book.objects.all()
+            my_visit = self.request.session.get('my_visit', 0)
+            print(my_visit)
+            self.request.session['my_visit'] = my_visit + 1
         ordering = self.get_ordering()
         if ordering:
             queryset = queryset.order_by(ordering)
