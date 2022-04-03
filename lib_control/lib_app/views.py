@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
@@ -38,8 +39,9 @@ class ManagementBooks(TemplateView):
     template_name = 'lib_app/management.html'
 
 
-class Redaction(AllBooks):
+class Redaction(PermissionRequiredMixin, AllBooks):
     template_name = 'lib_app/redaction.html'
+    permission_required = 'lib_app.view_book'
 
     def get_queryset(self):
         queryset = True
@@ -50,9 +52,6 @@ class Redaction(AllBooks):
 
         else:
             queryset = Book.objects.all()
-            my_visit = self.request.session.get('my_visit', 0)
-            print(my_visit)
-            self.request.session['my_visit'] = my_visit + 1
         ordering = self.get_ordering()
         if ordering:
             queryset = queryset.order_by(ordering)
