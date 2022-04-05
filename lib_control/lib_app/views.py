@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
@@ -30,7 +30,8 @@ make_queries = {
 }
 
 
-class AllBooks(ListView):
+class AllBooks(LoginRequiredMixin, ListView):
+    login_url = reverse_lazy('login')
     model = Book
     template_name = 'lib_app/all_books.html'
 
