@@ -1,9 +1,9 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
-from django.views.generic import ListView, TemplateView, CreateView, UpdateView
+from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DetailView
 from .models import Book, Author, Genre
 from transliterate import translit
 
@@ -176,4 +176,23 @@ class NewBook(CreateView):
         self.object.slug = slugify(translit(self.object.title, reversed=True), allow_unicode=True)
         self.object.save()
         return redirect(self.get_success_url())
+
+
+class UserList(ListView):
+    model = User
+    template_name = 'lib_app/user_list.html'
+
+    def get_queryset(self):
+        return User.objects.filter(groups__name='Reader')
+
+
+class ReaderList(UserList):
+    template_name = 'lib_app/reader_list.html'
+
+
+class ReaderCard(DetailView):
+    model = User
+    template_name = 'lib_app/reader_card.html'
+
+
 

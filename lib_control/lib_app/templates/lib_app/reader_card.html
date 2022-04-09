@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <h4>Карточка читателя: {{ object.first_name }} {{ object.last_name }}</h4>
+    </div><br>
+    <div class="row">
+        <div class="col-2">
+            <h5>Читает</h5>
+                {%  for book in object.reading_set.all %}
+                    {{ book.book_id.title }}
+                {% endfor %}
+        </div>
+        <div class="col-2">
+            <h5>Резерв</h5>
+
+        </div>
+        <div class="col-2">
+            <h5>Архив</h5>
+
+        </div>
+    </div>
+{% endblock %}

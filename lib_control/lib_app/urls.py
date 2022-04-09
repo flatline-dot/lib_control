@@ -11,5 +11,8 @@ urlpatterns = [
     path('correct_author/<slug:slug>/', views.CorrectAuthor.as_view(), name='correct_author'),
     path('correct_genre/<slug:slug>/', views.CorrectGenre.as_view(), name='correct_genre'),
     path('replenishment/', views.NewBook.as_view(), name='new_book'),
+    path('choice_user/', views.UserList.as_view(), name='choice_user'),
+    path('readers/', views.ReaderList.as_view(), name='readers'),
+    path('reader_card/<int:pk>/', views.ReaderCard.as_view(), name='reader_card')
 
 ]
