@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if  not perm %}
+<div class="col-2">
+    {{ user.first_name }} {{ user.last_name }}<br>
+    {{ book.title }}
+    <form action="{% url 'confirm' book.slug user.pk %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Подтвердить">
+    </form>
+</div>
+{% else %}
+<div class="col-2">
+    <h4>{{ perm }}</h4>
+    <a href="{% url 'reader_card' user.pk %}">Перейти в профиль</a>
+</div>
+{% endif %}
+{% endblock %}

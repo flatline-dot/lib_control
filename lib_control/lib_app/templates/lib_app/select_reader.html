@@ -3,7 +3,7 @@
 
 <ul>
     {% for user in object_list %}
-        <li><a href="{% url 'home' %}">{{ user.first_name }} {{ user.last_name }}</a></li>
+        <li><a href="{% url 'confirm' book user.pk %}">{{ user.first_name }} {{ user.last_name }}</a></li>
     {% endfor %}
 </ul>
 

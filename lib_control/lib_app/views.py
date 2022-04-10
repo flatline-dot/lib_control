@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DetailView
-from .models import Book, Author, Genre
+from .models import Book, Author, Genre, Reading
 from transliterate import translit
 
 
@@ -178,16 +178,22 @@ class NewBook(CreateView):
         return redirect(self.get_success_url())
 
 
-class UserList(ListView):
-    model = User
-    template_name = 'lib_app/user_list.html'
+class ReaderList(ListView):
+    template_name = 'lib_app/reader_list.html'
 
     def get_queryset(self):
         return User.objects.filter(groups__name='Reader')
 
 
-class ReaderList(UserList):
-    template_name = 'lib_app/reader_list.html'
+class SelectReader(ReaderList):
+    model = User
+    template_name = 'lib_app/select_reader.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['book'] = self.kwargs['slug']
+        print(context)
+        return context
 
 
 class ReaderCard(DetailView):
@@ -195,4 +201,31 @@ class ReaderCard(DetailView):
     template_name = 'lib_app/reader_card.html'
 
 
+class GiveConfirm(TemplateView):
+    template_name = 'lib_app/give_confirm.html'
+
+    def perm_valid(self):
+        status = ''
+        user = User.objects.get(pk=self.kwargs['pk'])
+        book_id = Book.objects.get(slug=self.kwargs['slug']).pk
+        if user.reading_set.count() >= 5:
+            status = 'Пользователь читает 5 или более книг'
+        elif Reading.objects.filter(book_id=book_id, user_id=user.pk).count():
+            status = 'Пользователь уже читает эту книгу'
+
+        return status if status else ''
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['perm'] = self.perm_valid()
+        context['book'] = Book.objects.get(slug=self.kwargs['slug'])
+        context['user'] = User.objects.get(pk=self.kwargs['pk'])
+        return context
+
+    def post(self, request, **kwargs):
+        book_id = Book.objects.get(slug=self.kwargs['slug'])
+        user_id = User.objects.get(pk=self.kwargs['pk'])
+        new_reading = Reading.objects.create(book_id=book_id, user_id=user_id, reading_days=10)
+        new_reading.save()
+        return redirect(reverse_lazy('reader_card', kwargs={'pk': self.kwargs['pk']}))
 
