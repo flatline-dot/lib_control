@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-1">
+    {{ user.first_name }}{{ user.last_name }}
+    {{ book.title }}
+    <form action="{% url 'del_confirm' book.slug user.pk %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Потдтвердить">
+    </form>
+</div>
+{% endblock %}

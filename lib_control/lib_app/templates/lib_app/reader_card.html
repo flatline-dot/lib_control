@@ -8,7 +8,7 @@
             <h5>Читает</h5>
             <ul>
                 {%  for book in object.reading_set.all %}
-                    <li>{{ book.book_id.title }}</li>
+                    <li>{{ book.book_id.title }} <a href="{% url 'del_confirm' book.book_id.slug user.pk %}">Возврат</a></li>
                 {% endfor %}
             </ul>
         </div>

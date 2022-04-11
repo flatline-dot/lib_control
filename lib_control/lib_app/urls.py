@@ -14,6 +14,7 @@ urlpatterns = [
     path('select_reader/<slug:slug>', views.SelectReader.as_view(), name='select_reader'),
     path('readers/', views.ReaderList.as_view(), name='readers'),
     path('reader_card/<int:pk>/', views.ReaderCard.as_view(), name='reader_card'),
-    path('confirm/<slug:slug>/<int:pk>/', views.GiveConfirm.as_view(), name='confirm')
+    path('confirm/<slug:slug>/<int:pk>/', views.GiveConfirm.as_view(), name='confirm'),
+    path('del_confirm/<slug:slug>/<int:pk>/', views.DeleteConfirm.as_view(), name='del_confirm')
 
 ]

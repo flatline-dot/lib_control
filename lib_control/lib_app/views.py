@@ -229,3 +229,13 @@ class GiveConfirm(TemplateView):
         new_reading.save()
         return redirect(reverse_lazy('reader_card', kwargs={'pk': self.kwargs['pk']}))
 
+
+class DeleteConfirm(GiveConfirm):
+    template_name = 'lib_app/delete_confirm.html'
+
+    def post(self, request, **kwargs):
+        book_id = Book.objects.get(slug=self.kwargs['slug'])
+        user_id = User.objects.get(pk=self.kwargs['pk'])
+        delete_reading = Reading.objects.filter(book_id=book_id, user_id=user_id)
+        delete_reading.delete()
+        return redirect(reverse_lazy('reader_card', kwargs={'pk': self.kwargs['pk']}))
