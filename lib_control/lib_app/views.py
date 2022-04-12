@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DetailView
-from .models import Book, Author, Genre, Reading
+from .models import Book, Author, Genre, Reading, Ban
 from transliterate import translit
 
 
@@ -192,13 +192,21 @@ class SelectReader(ReaderList):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['book'] = self.kwargs['slug']
-        print(context)
         return context
 
 
 class ReaderCard(DetailView):
     model = User
     template_name = 'lib_app/reader_card.html'
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=None)
+        obj_reading = Reading.objects.filter(user_id=obj.pk).all()
+        for reading in obj_reading:
+            if reading.total_date() == 'Срок истек' and not reading.ban_set.all():
+                obj_ban = Ban.objects.create(reading_id=reading, user_id=obj, task='100 рублей', complete=False)
+                obj_ban.save()
+        return obj
 
 
 class GiveConfirm(TemplateView):
@@ -227,6 +235,8 @@ class GiveConfirm(TemplateView):
         user_id = User.objects.get(pk=self.kwargs['pk'])
         new_reading = Reading.objects.create(book_id=book_id, user_id=user_id, reading_days=10)
         new_reading.save()
+        book = Reading.objects.get(pk=11)
+        print(book.date_start)
         return redirect(reverse_lazy('reader_card', kwargs={'pk': self.kwargs['pk']}))
 
 

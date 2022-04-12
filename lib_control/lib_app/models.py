@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -51,6 +53,18 @@ class Reading(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     date_start = models.DateField(auto_now_add=True, null=False)
     reading_days = models.IntegerField(null=False)
+
+    def total_date(self):
+        total_status = None
+        if (datetime.date.today() - self.date_start).days > 10:
+            total_status = 'Срок истек'
+
+        elif (datetime.date.today() != self.date_start) and (datetime.date.today() - self.date_start).days == 0:
+            total_status = 'Остался последний день'
+        else:
+            total_status = (self.date_start + datetime.timedelta(days=10) - datetime.date.today()).days
+
+        return total_status
 
     def __str__(self):
         return f'{self.book_id}, {self.user_id}'
