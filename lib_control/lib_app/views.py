@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth.models import User, Group
 from django.shortcuts import redirect
@@ -203,9 +205,10 @@ class ReaderCard(DetailView):
         obj = super().get_object(queryset=None)
         obj_reading = Reading.objects.filter(user_id=obj.pk).all()
         for reading in obj_reading:
-            if reading.total_date() == 'Срок истек' and not reading.ban_set.all():
-                obj_ban = Ban.objects.create(reading_id=reading, user_id=obj, task='100 рублей', complete=False)
-                obj_ban.save()
+            if reading.total_date() == 'Срок истек':
+                reading.fine = True
+                reading.fine_date = datetime.date.today()
+                reading.save()
         return obj
 
 
@@ -220,6 +223,12 @@ class GiveConfirm(TemplateView):
             status = 'Пользователь читает 5 или более книг'
         elif Reading.objects.filter(book_id=book_id, user_id=user.pk).count():
             status = 'Пользователь уже читает эту книгу'
+
+        reading = Reading.objects.filter(book_id=book_id, user_id=user.pk).all()
+        for fine in reading:
+            if fine.fine:
+                status = 'У пользователя непогашенные штрафы'
+                return status
 
         return status if status else ''
 
@@ -248,4 +257,18 @@ class DeleteConfirm(GiveConfirm):
         user_id = User.objects.get(pk=self.kwargs['pk'])
         delete_reading = Reading.objects.filter(book_id=book_id, user_id=user_id)
         delete_reading.delete()
+        return redirect(reverse_lazy('reader_card', kwargs={'pk': self.kwargs['pk']}))
+
+
+class PayFine(DeleteConfirm):
+    template_name = 'lib_app/pay_fine.html'
+
+    def post(self, request, **kwargs):
+        book_id = Book.objects.get(slug=self.kwargs['slug'])
+        user_id = User.objects.get(pk=self.kwargs['pk'])
+        pay_fine = Reading.objects.filter(book_id=book_id, user_id=user_id).first()
+        print(pay_fine)
+        pay_fine.fine = False
+        pay_fine.fine_date = None
+        pay_fine.save()
         return redirect(reverse_lazy('reader_card', kwargs={'pk': self.kwargs['pk']}))

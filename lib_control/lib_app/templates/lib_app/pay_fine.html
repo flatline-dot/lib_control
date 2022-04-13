@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col">
+    <h5>Подьвердить погашение штрафа</h5>
+    {{ user.first_name }}{{ user.last_name }}
+    <form action="{% url 'pay_fine' book.slug user.pk %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Подтвердить">
+    </form>
+
+</div>
+{% endblock %}

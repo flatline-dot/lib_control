@@ -53,9 +53,12 @@ class Reading(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     date_start = models.DateField(auto_now_add=True, null=False)
     reading_days = models.IntegerField(null=False)
+    fine = models.BooleanField(null=True)
+    fine_date = models.DateField(null=True)
 
     def total_date(self):
         total_status = None
+        #if (datetime.date(year=2022, month=5, day=15) - self.date_start).days > 10:
         if (datetime.date.today() - self.date_start).days > 10:
             total_status = 'Срок истек'
 

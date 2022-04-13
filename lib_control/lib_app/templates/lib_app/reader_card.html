@@ -19,11 +19,17 @@
 
         <div class="col-2">
             <h5>Штрафы</h5>
-            {% for fine in object.ban_set.all %}
+
             <ul>
-                <li>{{ fine.reading_id.book_id.title }}Штраф</li>
+                {% for book in object.reading_set.all %}
+                {% if book.fine %}
+                    <li>Штраф <a href="{% url 'pay_fine' book.book_id.slug user.pk %}">Погасить</a> </li>
+                {% else %}
+                    <h5></h5>
+                {% endif %}
+                {% endfor %}
             </ul>
-            {% endfor %}
+
         </div>
         <div class="col-2">
             <h5>Архив</h5>
