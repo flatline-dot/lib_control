@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'lib_app.apps.LibAppConfig',
     'lib_client',
-    'login'
+    'login',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -113,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -134,4 +136,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
+# celery settings
+CELERY_BEAT_SCHEDULER='django_celery_beat.scheduler:DatabaseScheduler'
+CELERY_RESULT_BECKEND='django-db'
+CELERY_TIMEZONE='Europe/Moscow'

@@ -43,7 +43,6 @@ class Book(models.Model):
     def get_absolute_url(self):
         return reverse('correct_book', kwargs={'pk': self.pk})
 
-
     class Meta:
         ordering = ['title']
 
@@ -52,25 +51,23 @@ class Reading(models.Model):
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE, null=False)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     date_start = models.DateField(auto_now_add=True, null=False)
-    reading_days = models.IntegerField(null=False)
-    fine = models.BooleanField(null=True)
-    fine_date = models.DateField(null=True)
 
-    def total_date(self):
-        total_status = None
-        #if (datetime.date(year=2022, month=5, day=15) - self.date_start).days > 10:
-        if (datetime.date.today() - self.date_start).days > 10:
-            total_status = 'Срок истек'
-
-        elif (datetime.date.today() != self.date_start) and (datetime.date.today() - self.date_start).days == 0:
-            total_status = 'Остался последний день'
-        else:
-            total_status = (self.date_start + datetime.timedelta(days=10) - datetime.date.today()).days
-
-        return total_status
+    def date_return(self):
+        return self.date_start + datetime.timedelta(days=20)
 
     def __str__(self):
         return f'{self.book_id}, {self.user_id}'
+
+
+class Fine(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    reading_id = models.ForeignKey(Reading, on_delete=models.CASCADE, null=False)
+    date_start = models.DateField(null=False)
+    pay_status = models.BooleanField(null=False)
+    pay_date = models.DateField(null=True)
+
+    def __str__(self):
+        return f'{self.user_id}, {self.reading_id}, Оплачен: {self.pay_status}'
 
 
 class Reserve(models.Model):
@@ -91,4 +88,3 @@ class Ban(models.Model):
 
     def __str__(self):
         return f'{self.reading_id}, {self.user_id}'
-
