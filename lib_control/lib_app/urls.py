@@ -16,6 +16,6 @@ urlpatterns = [
     path('reader_card/<int:pk>/', views.ReaderCard.as_view(), name='reader_card'),
     path('confirm/<slug:slug>/<int:pk>/', views.GiveConfirm.as_view(), name='confirm'),
     path('del_confirm/<slug:slug>/<int:pk>/', views.DeleteConfirm.as_view(), name='del_confirm'),
-    path('pay_fine/<slug:slug>/<int:pk>/', views.PayFine.as_view(), name='pay_fine')
+    path('pay_fine/<int:pk>/<int:us_pk>/', views.PayFine.as_view(), name='pay_fine')
 
 ]

@@ -62,9 +62,9 @@ class Reading(models.Model):
 class Fine(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     reading_id = models.ForeignKey(Reading, on_delete=models.CASCADE, null=False)
-    date_start = models.DateField(null=False)
+    date_start = models.DateField(null=False, auto_now_add=True)
     pay_status = models.BooleanField(null=False)
-    pay_date = models.DateField(null=True)
+    pay_date = models.DateField(null=True, auto_now=True)
 
     def __str__(self):
         return f'{self.user_id}, {self.reading_id}, Оплачен: {self.pay_status}'

@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 from django.contrib.auth.models import Group
 from .forms import CreateUser
+from django.contrib.auth.models import User
 
 
 class RegisterUser(CreateView):
@@ -18,3 +19,4 @@ class RegisterUser(CreateView):
 
 class MyCard(DetailView):
     template_name = 'my_card.html'
+    model = User

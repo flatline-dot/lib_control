@@ -56,8 +56,11 @@
                      {{ book.available_count }}
                 </div>
                <div class="col-1">
-
+               {% if book.available_count %}
                    <a href="{% url 'select_reader' book.slug %}">Выдать</a>
+               {% else %}
+                    Нет в наличии
+               {% endif %}
                </div>
 
             </div><br>

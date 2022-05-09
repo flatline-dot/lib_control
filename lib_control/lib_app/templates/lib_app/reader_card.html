@@ -3,37 +3,61 @@
     <div class="row">
         <h4>Карточка читателя: {{ object.first_name }} {{ object.last_name }}</h4>
     </div><br>
-    <div class="row">
-        <div class="col-3">
-            <h5>Читает</h5>
-            <ul>
-                {%  for book in object.reading_set.all %}
-                    <li>{{ book.book_id.title }}  Осталось дней: {{ book.total_date }} <a href="{% url 'del_confirm' book.book_id.slug user.pk %}">Возврат</a></li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="col-2">
-            <h5>Резерв</h5>
-
-        </div>
-
-        <div class="col-2">
-            <h5>Штрафы</h5>
-
-            <ul>
-                {% for book in object.reading_set.all %}
-                {% if book.fine %}
-                    <li>Штраф <a href="{% url 'pay_fine' book.book_id.slug user.pk %}">Погасить</a> </li>
-                {% else %}
-                    <h5></h5>
-                {% endif %}
-                {% endfor %}
-            </ul>
-
-        </div>
-        <div class="col-2">
-            <h5>Архив</h5>
+    <div class="container-sm">
+        <div class="row">
+            <div class="col-3">
+                Читает
+            </div>
+            <div class="col-2">
+                Дата возврата
+            </div>
 
         </div>
     </div>
+
+    {%  for book in object.reading_set.all %}
+    <div class="row">
+        <div class="col-3">
+            {{ book.book_id.title }}
+        </div>
+        <div class="col-2">
+            {{ book.date_return }}
+        </div>
+        <div class="col-3">
+            <a href="{% url 'del_confirm' book.book_id.slug object.pk %}">Возврат</a>
+        </div>
+    </div>
+    {% endfor %}
+
+
+
+    <h4>Штрафы</h4>
+        <div class="container-sm">
+            <div class="row">
+                <div class="col-3">
+                    Книга
+                </div>
+                <div class="col-2">
+                    Статус
+                </div>
+
+            </div>
+        </div>
+    {%  for fine in object.fine_set.all %}
+    {% if not fine.pay_status %}
+            <div class="row">
+                <div class="col-3">
+                    {{ fine.reading_id.book_id }}
+                </div>
+                <div class="col-2">
+                    Не оплачен
+                </div>
+                <div class="col-3">
+                    <a href="{% url 'pay_fine' fine.pk object.pk %}">Возврат</a>
+                </div>
+
+            </div>
+    {% endif %}
+    {% endfor %}
+
 {% endblock %}

@@ -1,7 +1,6 @@
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
-from django.views.generic import DetailView
 
 
 class LoginUser(LoginView):
@@ -13,8 +12,8 @@ class LoginUser(LoginView):
         if self.request.user.has_perm('lib_app.view_book'):
             redirect_to = reverse_lazy('home')
         else:
-            redirect_to = reverse_lazy('manage')
-
+            if self.request.user.is_authenticated:
+                redirect_to = reverse_lazy('my_card', kwargs={'pk': self.request.user.pk})
         url_is_safe = url_has_allowed_host_and_scheme(
             url=redirect_to,
             allowed_hosts=self.get_success_url_allowed_hosts(),
@@ -23,4 +22,3 @@ class LoginUser(LoginView):
         )
 
         return redirect_to if url_is_safe else reverse_lazy('login')
-

@@ -1,12 +1,12 @@
 import datetime
 
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from django.shortcuts import redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.utils.text import slugify
 from django.views.generic import ListView, TemplateView, CreateView, UpdateView, DetailView
-from .models import Book, Author, Genre, Reading, Ban
+from .models import Book, Author, Genre, Reading, Fine
 from transliterate import translit
 
 
@@ -32,20 +32,22 @@ make_queries = {
 }
 
 
-class AllBooks(LoginRequiredMixin, ListView):
+class AllBooks(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     login_url = reverse_lazy('login')
+    permission_required = 'lib_app.view_book'
     model = Book
     template_name = 'lib_app/all_books.html'
 
 
-class ManagementBooks(TemplateView):
+class ManagementBooks(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    login_url = reverse_lazy('login')
+    permission_required = 'lib_app.view_book'
     template_name = 'lib_app/management.html'
 
 
-class Redaction(PermissionRequiredMixin, AllBooks):
+class Redaction(AllBooks):
     template_name = 'lib_app/redaction.html'
-    permission_required = 'lib_app.view_book'
-
+    
     def get_queryset(self):
         queryset = True
         if self.request.GET.get('search_query') and self.request.GET.get('search_select'):
@@ -167,7 +169,9 @@ class CreateGenre(CreateAuthor):
         return context
 
 
-class NewBook(CreateView):
+class NewBook(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    login_url = reverse_lazy('login')
+    permission_required = 'lib_app.view_book'
     model = Book
     fields = ['title', 'book_author', 'book_genre', 'book_amount']
     template_name = 'lib_app/new_book.html'
@@ -180,7 +184,9 @@ class NewBook(CreateView):
         return redirect(self.get_success_url())
 
 
-class ReaderList(ListView):
+class ReaderList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    login_url = reverse_lazy('login')
+    permission_required = 'lib_app.view_book'
     template_name = 'lib_app/reader_list.html'
 
     def get_queryset(self):
@@ -197,19 +203,11 @@ class SelectReader(ReaderList):
         return context
 
 
-class ReaderCard(DetailView):
+class ReaderCard(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    login_url = reverse_lazy('login')
+    permission_required = 'lib_app.view_book'
     model = User
     template_name = 'lib_app/reader_card.html'
-
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset=None)
-        obj_reading = Reading.objects.filter(user_id=obj.pk).all()
-        for reading in obj_reading:
-            if reading.total_date() == 'Срок истек':
-                reading.fine = True
-                reading.fine_date = datetime.date.today()
-                reading.save()
-        return obj
 
 
 class GiveConfirm(TemplateView):
@@ -224,12 +222,12 @@ class GiveConfirm(TemplateView):
         elif Reading.objects.filter(book_id=book_id, user_id=user.pk).count():
             status = 'Пользователь уже читает эту книгу'
 
-        reading = Reading.objects.filter(book_id=book_id, user_id=user.pk).all()
-        for fine in reading:
-            if fine.fine:
-                status = 'У пользователя непогашенные штрафы'
-                return status
-
+#        reading = Reading.objects.filter(book_id=book_id, user_id=user.pk).all()
+#        for fine in reading:
+#            if fine.fine:
+#                status = 'У пользователя непогашенные штрафы'
+#                return status
+#
         return status if status else ''
 
     def get_context_data(self, **kwargs):
@@ -242,10 +240,8 @@ class GiveConfirm(TemplateView):
     def post(self, request, **kwargs):
         book_id = Book.objects.get(slug=self.kwargs['slug'])
         user_id = User.objects.get(pk=self.kwargs['pk'])
-        new_reading = Reading.objects.create(book_id=book_id, user_id=user_id, reading_days=10)
+        new_reading = Reading.objects.create(book_id=book_id, user_id=user_id)
         new_reading.save()
-        book = Reading.objects.get(pk=11)
-        print(book.date_start)
         return redirect(reverse_lazy('reader_card', kwargs={'pk': self.kwargs['pk']}))
 
 
@@ -260,15 +256,18 @@ class DeleteConfirm(GiveConfirm):
         return redirect(reverse_lazy('reader_card', kwargs={'pk': self.kwargs['pk']}))
 
 
-class PayFine(DeleteConfirm):
+class PayFine(TemplateView):
     template_name = 'lib_app/pay_fine.html'
 
     def post(self, request, **kwargs):
-        book_id = Book.objects.get(slug=self.kwargs['slug'])
-        user_id = User.objects.get(pk=self.kwargs['pk'])
-        pay_fine = Reading.objects.filter(book_id=book_id, user_id=user_id).first()
-        print(pay_fine)
-        pay_fine.fine = False
-        pay_fine.fine_date = None
-        pay_fine.save()
-        return redirect(reverse_lazy('reader_card', kwargs={'pk': self.kwargs['pk']}))
+        fine = Fine.objects.get(pk=self.kwargs['pk'])
+        fine.pay_status = True
+        fine.save()
+        print(self.kwargs)
+        return redirect(reverse_lazy('reader_card', kwargs={'pk': self.kwargs['us_pk']}))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fine_pk'] = self.kwargs['pk']
+        context['reader_pk'] = self.kwargs['us_pk']
+        return context
