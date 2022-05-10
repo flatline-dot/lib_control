@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
+<form action="{% url 'readers' %}" method="get">
+
+    {% if search_query %}
+        <input type="text" name="search_query" value="{{ search_query }}">
+    {% else %}
+        <input type="text" name="search_query" value="">
+    {% endif %}
+    <button type="submit">Применить</button>
+</form>
+<a href="{% url 'readers' %}">Отчистить все</a>
 
 <ul>
     {% for user in object_list %}

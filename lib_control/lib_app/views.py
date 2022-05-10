@@ -38,16 +38,6 @@ class AllBooks(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Book
     template_name = 'lib_app/all_books.html'
 
-
-class ManagementBooks(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    login_url = reverse_lazy('login')
-    permission_required = 'lib_app.view_book'
-    template_name = 'lib_app/management.html'
-
-
-class Redaction(AllBooks):
-    template_name = 'lib_app/redaction.html'
-    
     def get_queryset(self):
         queryset = True
         if self.request.GET.get('search_query') and self.request.GET.get('search_select'):
@@ -57,9 +47,9 @@ class Redaction(AllBooks):
 
         else:
             queryset = Book.objects.all()
-        ordering = self.get_ordering()
-        if ordering:
-            queryset = queryset.order_by(ordering)
+            ordering = self.get_ordering()
+            if ordering:
+                queryset = queryset.order_by(ordering)
         return queryset
 
     def get_ordering(self):
@@ -74,6 +64,16 @@ class Redaction(AllBooks):
         context['choice_search_options'] = self.request.GET.get('search_select')
         context['search_query'] = self.request.GET.get('search_query')
         return context
+
+
+class ManagementBooks(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    login_url = reverse_lazy('login')
+    permission_required = 'lib_app.view_book'
+    template_name = 'lib_app/management.html'
+
+
+class Redaction(AllBooks):
+    template_name = 'lib_app/redaction.html'
 
 
 class CorrectBook(UpdateView):
@@ -190,7 +190,15 @@ class ReaderList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'lib_app/reader_list.html'
 
     def get_queryset(self):
-        return User.objects.filter(groups__name='Reader')
+        if self.request.GET.get('search_query'):
+            return User.objects.filter(groups__name='Reader', last_name=self.request.GET.get('search_query'))
+        else:
+            return User.objects.filter(groups__name='Reader')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('search_query')
+        return context
 
 
 class SelectReader(ReaderList):
@@ -212,7 +220,7 @@ class ReaderCard(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
 
 class GiveConfirm(TemplateView):
     template_name = 'lib_app/give_confirm.html'
-
+    
     def perm_valid(self):
         status = ''
         user = User.objects.get(pk=self.kwargs['pk'])
@@ -221,13 +229,6 @@ class GiveConfirm(TemplateView):
             status = 'Пользователь читает 5 или более книг'
         elif Reading.objects.filter(book_id=book_id, user_id=user.pk).count():
             status = 'Пользователь уже читает эту книгу'
-
-#        reading = Reading.objects.filter(book_id=book_id, user_id=user.pk).all()
-#        for fine in reading:
-#            if fine.fine:
-#                status = 'У пользователя непогашенные штрафы'
-#                return status
-#
         return status if status else ''
 
     def get_context_data(self, **kwargs):

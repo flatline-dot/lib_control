@@ -69,6 +69,9 @@ class Fine(models.Model):
     def __str__(self):
         return f'{self.user_id}, {self.reading_id}, Оплачен: {self.pay_status}'
 
+    class Meta:
+        unique_together = ['user_id', 'reading_id']
+
 
 class Reserve(models.Model):
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE, null=False)
