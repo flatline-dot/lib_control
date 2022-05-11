@@ -35,11 +35,11 @@
 <div class='container-sm'>
 
         <div class="row">
-       <div class="col-3">
+       <div class="col-4">
             Наименование
         </div>
 
-       <div class="col-2">
+       <div class="col-3">
             Автор
         </div>
 
@@ -50,25 +50,22 @@
              Читают
         </div>
        <div class="col-1">
-             Резерв
-        </div>
-       <div class="col-1">
              В наличии
         </div>
 
     </div>
-</div>
+</div><br>
 
 <div class='container'>
 
         {% for book in object_list %}
 
            <div class="row">
-               <div class="col-3">
+               <div class="col-4">
                     {{ book.title }}
                 </div>
 
-               <div class="col-2">
+               <div class="col-3">
                     {{ book.book_author }}
                 </div>
 
@@ -77,9 +74,6 @@
                 </div>
                <div class="col-1">
                      {{ book.reading_set.all.count }}
-                </div>
-               <div class="col-1">
-                     {{ book.reserve_set.all.count }}
                 </div>
                <div class="col-1">
                      {{ book.available_count }}

@@ -8,18 +8,35 @@
 
 
 .container{
-    width: 1600px;
+    width: 1400px;
     margin: 0 auto;
     max-width: 1500px;
 
-    height: 600px;
-    border: 2px solid black;
+    height: 500px;
+    
+    overflow: scroll;
 
 
 
 }
 
 .container-sm{
+    font-size: 19px;
+    font-family: 'Times New Roman', Times, serif;
     margin-top: 130px;
-    max-width: 1500px;
+    max-width: 1400px;
+    border-bottom: 2px solid black;
+    
+    
+}
+
+.col-2 {
+    text-align: left;
+
+}
+
+
+.col-1{
+    text-align: center;
+
 }
