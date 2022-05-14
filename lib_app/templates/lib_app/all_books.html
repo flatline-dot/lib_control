@@ -1,38 +1,60 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form action="{% url 'home' %}" method="get">
-     <select name="select"> <!--Supplement an id here instead of using 'name'-->
-       <option disabled selected value>Сортировать по:</option>
-           {% for key, value_ in sort_options.items %}
-              {% if choice_sort_options == key%}
-                 <option value={{ key }} selected>{{ value_ }}</option>
-             {% else %}
-                 <option value={{ key }}>{{ value_ }}</option>
-             {% endif %}
-           {% endfor %}
-     </select>
- 
-     <select name="search_select"> <!--Supplement an id here instead of using 'name'-->
-       <option disabled selected value>Искать по:</option>
-           {% for key, value_ in search_options.items %}
-              {% if choice_search_options == key%}
-                 <option value={{ key }} selected>{{ value_ }}</option>
-             {% else %}
-                 <option value={{ key }}>{{ value_ }}</option>
-             {% endif %}
-           {% endfor %}
-     </select>
-     {% if search_query %}
-         <input type="text" name="search_query" value="{{ search_query }}">
-     {% else %}
-         <input type="text" name="search_query" value="">
-     {% endif %}
-     <button type="submit">Применить</button>
- </form>
- <a href="{% url 'home' %}">Отчистить все</a>
 
-<div class='container-sm'>
+<div class="container-fluid"id="search">
+    
+        <form class="d-flex" action="{% url 'home' %}" method="get">
+            <select class="form-select-sm" name="select">
+                <option disabled selected value>Сортировать по:</option>
+                {% for key, value_ in sort_options.items %}
+                    {% if choice_sort_options == key%}
+                        <option value={{ key }} selected>{{ value_ }}</option>
+                    {% else %}
+                        <option value={{ key }}>{{ value_ }}</option>
+                    {% endif %}
+                {% endfor %}
+
+            </select>
+
+
+                <select class="form-select-sm" name="search_select">
+                    <option disabled selected value>Искать по:</option>
+                        {% for key, value_ in search_options.items %}
+                        {% if choice_search_options == key%}
+                            <option value={{ key }} selected>{{ value_ }}</option>
+                        {% else %}
+                            <option value={{ key }}>{{ value_ }}</option>
+                        {% endif %}
+                        {% endfor %}
+                </select>
+
+
+                {% if search_query %}
+                    <input type="text" class="form-control form-control-sm" id="search-form" name="search_query" value="{{ search_query }}">
+                {% else %}
+                    <input type="text" class="form-control form-control-sm" id="search-form" name="search_query" value="">
+                {% endif %}
+
+                <button type="submit" class="btn btn-outline-dark btn-sm">Применить</button>
+            
+    </form><br>
+        <div class="row">
+            
+            <div class="col-4">
+                <a href="{% url 'home' %}" class="btn btn-outline-dark btn-sm" role="button" data-bs-toggle="button">Отчистить все</a>
+            </div>
+        </div>
+        
+        
+  
+</div>
+
+
+
+
+
+<div class='container' id="sm">
 
         <div class="row">
        <div class="col-4">
@@ -56,7 +78,7 @@
     </div>
 </div><br>
 
-<div class='container'>
+<div class='container' id="lg">
 
         {% for book in object_list %}
 
@@ -80,7 +102,8 @@
                 </div>
                <div class="col-1">
                {% if book.available_count %}
-                   <a href="{% url 'select_reader' book.slug %}">Выдать</a>
+               <a href="{% url 'select_reader' book.slug %}" class="btn btn-outline-dark btn-sm"" role="button" data-bs-toggle="button">Выдать</a>
+                   
                {% else %}
                     Нет в наличии
                {% endif %}

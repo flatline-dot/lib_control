@@ -66,12 +66,6 @@ class AllBooks(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return context
 
 
-class ManagementBooks(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    login_url = reverse_lazy('login')
-    permission_required = 'lib_app.view_book'
-    template_name = 'lib_app/management.html'
-
-
 class Redaction(AllBooks):
     template_name = 'lib_app/redaction.html'
 

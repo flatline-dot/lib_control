@@ -1,5 +1,5 @@
-{% extends 'lib_app/management.html' %}
-{% block correct %}
+{% extends 'base.html' %}
+{% block content %}
 
 <form action="{% url 'redaction' %}" method="get">
     <select name="select"> <!--Supplement an id here instead of using 'name'-->

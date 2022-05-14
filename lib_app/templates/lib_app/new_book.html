@@ -1,5 +1,5 @@
-{% extends 'lib_app/management.html' %}
-{% block correct %}
+{% extends 'base.html' %}
+{% block content %}
     <form action="{% url 'new_book' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}

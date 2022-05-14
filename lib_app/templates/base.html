@@ -10,21 +10,48 @@
     <title>Hello, world!</title>
   </head>
   <body>
-    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-      <ul class="nav nav">
-        <li class="nav-item">
-          <a class="nav-link active" href="{% url 'home' %}">Главная</a>
-  
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'manage' %}">Управление</a>
-  
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'readers' %}">Читатели</a>
-  
-        </li>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: red">
+      <div class="container-fluid">
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Главная</a>
+        
+              </li>
+              
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="{% url 'readers' %}">Читатели</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="{% url 'redaction' %}">Редактирование данных</a>
+              </li>
+
+              <li class="nav-text">
+                <a class="nav-link" aria-current="page" href="{% url 'new_book' %}">Новое поступление</a>
+              </li>
+          </ul>
+        </div>
+
+      
+        <span class="navbar-text">
+          <a class="nav-link" aria-current="page" href="{% url 'logout' %}">Logout</a>
+        </span>
+      </div>
     </nav>
+
+
+
+
+
+
+
+
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+    </div>
     {% block content %}{% endblock %}
 
   </body>

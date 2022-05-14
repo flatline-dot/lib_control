@@ -1,13 +1,13 @@
 
 
-}
+
 
 .container .row{
     height: 50px;
 }
 
 
-.container{
+#lg{
     width: 1400px;
     margin: 0 auto;
     max-width: 1500px;
@@ -20,15 +20,22 @@
 
 }
 
-.container-sm{
-    font-size: 19px;
-    font-family: 'Times New Roman', Times, serif;
-    margin-top: 130px;
-    max-width: 1400px;
+#sm{
+    width: 1400px;
+    font-size: 17px;
+    font-family:'Courier New', Courier, monospace;
+    margin-top: 40px;
+    max-width: 1500px;
     border-bottom: 2px solid black;
+    font-weight: bold;
+    margin: 0 auto, 100, 0;
+
     
     
 }
+
+
+
 
 .col-2 {
     text-align: left;
@@ -39,4 +46,30 @@
 .col-1{
     text-align: center;
 
+}
+
+
+#search{
+    width: 700px;
+    margin-top: 60px;
+    margin-left: 70px;
+    
+}
+
+
+#user_list {
+    margin-top: 100px;
+    width: 800px;
+    margin-left: 50px;
+}
+
+#user_search{
+    width: 400px;
+    margin-left: 50px;
+    margin-top: 50px;
+}
+
+#search-form{
+    
+    border-color: black;
 }
