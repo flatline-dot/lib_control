@@ -1,63 +1,75 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class='container' id="reader-card">
+    <h3>{{ object.first_name }} {{ object.last_name }} - Карточка читателя</h3><br><br><br>
     <div class="row">
-        <h4>Карточка читателя: {{ object.first_name }} {{ object.last_name }}</h4>
-    </div><br>
-    <div class="container-sm">
-        <div class="row">
-            <div class="col-3">
-                Читает
-            </div>
-            <div class="col-2">
-                Дата возврата
-            </div>
-
+       <div class="col-5">
+            Читает
         </div>
-    </div>
+
+       <div class="col-5" id="date">
+            Дата возврата
+        </div>
+
+       <div class="col-1">
+        </div>
+    </div><br>
+</div>
+
+<div class='container' id="reader-data">
 
     {%  for book in object.reading_set.all %}
-    <div class="row">
-        <div class="col-3">
+
+       <div class="row">
+           <div class="col-5">
             {{ book.book_id.title }}
-        </div>
-        <div class="col-2">
-            {{ book.date_return }}
-        </div>
-        <div class="col-3">
-            <a href="{% url 'del_confirm' book.book_id.slug object.pk %}">Возврат</a>
+            </div>
+
+           <div class="col-5" id="date">
+                {{ book.date_return }}
+            </div>
+           <div class="col-1">
+
+             <a href="{% url 'del_confirm' book.book_id.slug object.pk %}" class="btn btn-outline-dark btn-sm"" role="button" data-bs-toggle="button">Возврат</a>
+            
+           </div>
+
+        </div><br>
+    {% endfor %}
+</div>
+
+
+<div>
+    <div class="container" id="reader-card">
+        <h4>Штрафы</h4><br>
+        <div class="row">
+            <div class="col-5">
+                Книга
+            </div>
+            <div class="col-5" id="date">
+                Статус
+            </div>
+
         </div>
     </div>
-    {% endfor %}
+    <div class="container" id="reader-data">
+        {%  for fine in object.fine_set.all %}
+        {% if not fine.pay_status %}
+                <div class="row">
+                    <div class="col-5">
+                        {{ fine.reading_id.book_id.title }}
+                    </div>
+                    <div class="col-5" id="date">
+                        Не оплачен
+                    </div>
+                    <div class="col-1">
+                        <a href="{% url 'pay_fine' fine.pk object.pk %}" class="btn btn-outline-dark btn-sm"" role="button" data-bs-toggle="button">Погасить</a>
+                    </div>
 
-
-
-    <h4>Штрафы</h4>
-        <div class="container-sm">
-            <div class="row">
-                <div class="col-3">
-                    Книга
                 </div>
-                <div class="col-2">
-                    Статус
-                </div>
-
-            </div>
-        </div>
-    {%  for fine in object.fine_set.all %}
-    {% if not fine.pay_status %}
-            <div class="row">
-                <div class="col-3">
-                    {{ fine.reading_id.book_id }}
-                </div>
-                <div class="col-2">
-                    Не оплачен
-                </div>
-                <div class="col-3">
-                    <a href="{% url 'pay_fine' fine.pk object.pk %}">Возврат</a>
-                </div>
-
-            </div>
-    {% endif %}
-    {% endfor %}
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock %}

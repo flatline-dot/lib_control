@@ -1,10 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<ul>
-    {% for user in object_list %}
-        <li><a href="{% url 'confirm' book user.pk %}">{{ user.first_name }} {{ user.last_name }}</a></li>
+<div class="container-fluid" id="user_search">
+    <div class="row">
+        <form  class="d-flex" action="{% url 'readers' %}" method="get">
+
+            {% if search_query %}
+                <input type="text" class="form-control form-control-sm" id="seacrh-form" placeholder="Поиск по фамилии" name="search_query" value="{{ search_query }}">
+            {% else %}
+                <input type="text" class="form-control form-control-sm" id="search-form" name="search_query" placeholder="Поиск по фамилии" value="">
+            {% endif %}
+            <button type="submit" class="btn btn-outline-dark btn-sm" role="button" data-bs-toggle="button">Поиск</button>
+        </form>
+    </div><br>
+
+    <div class="row">
+        <div class="col-2">
+            <a href="{% url 'readers' %}" class="btn btn-outline-dark btn-sm" role="button" data-bs-toggle="button">Отчистить</a>
+        </div>
+    </div>    
+</div>
+
+
+<div class="container" id="user_list">
+    <div class="list-group">
+        {% for user in object_list %}
+        <a href="{% url 'confirm' book user.pk %}" class="list-group-item list-group-item-action list-group-item-light">{{ user.first_name }} {{ user.last_name }}</a> 
+    </div>
+
+
     {% endfor %}
-</ul>
+</div>
 
 {% endblock %}
