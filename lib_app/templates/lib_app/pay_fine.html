@@ -1,12 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="col">
-    <h5>Подьвердить погашение штрафа</h5>
-    {{ user.first_name }}{{ user.last_name }}
-    <form action="{% url 'pay_fine' fine_pk reader_pk %}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Подтвердить">
-    </form>
-
-</div>
+    <div class="container" id="submit">
+        <div class="row"></div>
+        <h5>Подтвердите погашение трафа:</h5>
+        
+       
+        <div class="row">
+            <div class="col-12">
+                {{ user.first_name }} {{ user.last_name }} - {{ book.title }}<br>
+                
+            </div>
+        </div>
+    
+    
+    
+        <div class="row-2">
+            <div class="col-12">
+                <form action="{% url 'pay_fine' fine_pk reader_pk %}"  method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Подтвердить" class="btn btn-outline-dark btn-sm" role="button" data-bs-toggle="button">
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+

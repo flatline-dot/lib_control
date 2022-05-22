@@ -1,5 +1,32 @@
-<form action="{% url 'login' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
-</form>
+{% extends '/home/oneuser/projects/lib_control/lib_app/templates/base.html' %}
+{% block content %}
+<div class="container" id="create_book">
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <h4>Авторизация:</h4><br><br>
+            <div class="row">
+                <div class="col-4">
+                    <h5>{{ form.username.label }}</h5><br>
+                    <h5>{{ form.password.label }}</h5>
+                </div>
+                <div class="col-3">
+                    <h5>{{ form.username }}</h5><br>
+                    <h5>{{ form.password }}</h5>
+                </div>                
+            </div><br><br><br><br>
+        <div class="row">
+            <div class="col-2">
+                <button type="submit" class="btn btn-outline-dark btn-sm"" role="button" data-bs-toggle="button">Войти</button>
+            </div>
+
+            <div class="col-1">
+                <a href="{% url 'register' %}" class="btn btn-outline-dark btn-sm" role="button" data-bs-toggle="button">Регистрация</a>
+            </div>
+
+        </div>
+        
+        
+    </form>
+    
+</div>
+{% endblock %}

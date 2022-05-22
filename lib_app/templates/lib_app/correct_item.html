@@ -1,5 +1,28 @@
-<form action="{% url action object.slug %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Сохранить</button>
-</form>
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" id="create_book">
+    <form action="{% url action object.slug %}" method="post">
+        {% csrf_token %}
+
+            <div class="row">
+                {% if action == 'correct_author' %}
+                    <div class="col-2">
+                        <h5>{{ form.author_book.label }}</h5>
+                    </div>
+                    <div class="col-3">
+                        <h5>{{ form.author_book }}</h5>
+                    </div>
+                {% elif action == 'correct_genre' %}
+                    <div class="col-2">
+                        <h5>{{ form.genre_book.label }}</h5>
+                    </div>
+                    <div class="col-3">
+                        <h5>{{ form.genre_book }}</h5>
+                    </div>
+                {% endif %}
+            </div><br>
+        
+        <button type="submit" class="btn btn-outline-dark btn-sm"" role="button" data-bs-toggle="button">Сохранить</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,17 +1,30 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<form action="{% url 'register' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
-</form>
-</body>
-</html>
+{% extends '/home/oneuser/projects/lib_control/lib_app/templates/base.html' %}
+{% block content %}
+<div class="container" id="create_book">
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <h4>Регистрация:</h4><br><br>
+            <div class="row">
+                <div class="col-4">
+                    <h5>Логин</h5><br>
+                    <h5>{{ form.first_name.label }}</h5><br>
+                    <h5>{{ form.last_name.label }}</h5><br>
+                    <h5>{{ form.email.label }}</h5><br><br>
+                    <h5>{{ form.password1.label }}</h5><br>
+                    <h5>{{ form.password2.label }}</h5><br>
+                    
+                </div>
+                <div class="col-3">
+                    <h5>{{ form.username }}</h5><br>
+                    <h5>{{ form.first_name }}</h5><br>
+                    <h5>{{ form.last_name }}</h5><br>
+                    <h5>{{ form.email }}</h5><br><br>
+                    <h5>{{ form.password1 }}</h5><br>
+                    <h5>{{ form.password2 }}</h5><br>
+                </div>                
+            </div><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        
+        <button type="submit" class="btn btn-outline-dark btn-sm"" role="button" data-bs-toggle="button">Сохранить</button>
+    </form>
+</div>
+{% endblock %}

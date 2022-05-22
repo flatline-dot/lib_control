@@ -169,7 +169,7 @@ class NewBook(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Book
     fields = ['title', 'book_author', 'book_genre', 'book_amount']
     template_name = 'lib_app/new_book.html'
-    success_url = reverse_lazy('manage')
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         self.object = form.save(commit=False)

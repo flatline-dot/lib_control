@@ -1,67 +1,100 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<form action="{% url 'redaction' %}" method="get">
-    <select name="select"> <!--Supplement an id here instead of using 'name'-->
-      <option disabled selected value>Сортировать по:</option>
-          {% for key, value_ in sort_options.items %}
-             {% if choice_sort_options == key%}
-                <option value={{ key }} selected>{{ value_ }}</option>
-            {% else %}
-                <option value={{ key }}>{{ value_ }}</option>
-            {% endif %}
-          {% endfor %}
-    </select>
+<div class="container-fluid"id="search">
+    
+    <form class="d-flex" action="{% url 'redaction' %}" method="get">
+        <select class="form-select-sm" name="select">
+            <option disabled selected value>Сортировать по:</option>
+            {% for key, value_ in sort_options.items %}
+                {% if choice_sort_options == key%}
+                    <option value={{ key }} selected>{{ value_ }}</option>
+                {% else %}
+                    <option value={{ key }}>{{ value_ }}</option>
+                {% endif %}
+            {% endfor %}
 
-    <select name="search_select"> <!--Supplement an id here instead of using 'name'-->
-      <option disabled selected value>Искать по:</option>
-          {% for key, value_ in search_options.items %}
-             {% if choice_search_options == key%}
-                <option value={{ key }} selected>{{ value_ }}</option>
-            {% else %}
-                <option value={{ key }}>{{ value_ }}</option>
-            {% endif %}
-          {% endfor %}
-    </select>
-    {% if search_query %}
-        <input type="text" name="search_query" value="{{ search_query }}">
-    {% else %}
-        <input type="text" name="search_query" value="">
-    {% endif %}
-    <button type="submit">Применить</button>
-</form>
+        </select>
 
-<a href="{% url 'redaction' %}">Отчистить все</a>
+        <select class="form-select-sm" name="search_select">
+            <option disabled selected value>Искать по:</option>
+                {% for key, value_ in search_options.items %}
+                {% if choice_search_options == key%}
+                    <option value={{ key }} selected>{{ value_ }}</option>
+                {% else %}
+                    <option value={{ key }}>{{ value_ }}</option>
+                {% endif %}
+                {% endfor %}
+        </select>
+        {% if search_query %}
+            <input type="text" class="form-control form-control-sm" id="search-form" name="search_query" value="{{ search_query }}">
+        {% else %}
+            <input type="text" class="form-control form-control-sm" id="search-form" name="search_query" value="">
+        {% endif %}
 
-{% for book in object_list %}
-   <div class="row">
-       <div class="col-3">
-            {{ book.title }}
+        <button type="submit" class="btn btn-outline-dark btn-sm">Применить</button>
+        
+    </form><br>
+    <div class="row">
+        
+        <div class="col-4">
+            <a href="{% url 'redaction' %}" class="btn btn-outline-dark btn-sm" role="button" data-bs-toggle="button">Отчистить все</a>
         </div>
+    </div>
+</div>
 
-       <div class="col-2">
-            {{ book.book_author }}
-        </div>
+<div class='container' id="sm">
+    <div class="row">
+   <div class="col-3">
+        Наименование
+    </div>
 
-       <div class="col-2">
-             {{ book.book_genre }}
-        </div>
-       <div class="col-1">
-             {{ book.reading_set.all.count }}
-        </div>
-       <div class="col-1">
-             {{ book.available_count }}
-        </div>
-       <div class="col-1">
-            <div class="row">
-                <a href="{% url 'correct_book' book.slug %}">Редактировать данные</a>
+   <div class="col-3">
+        Автор
+    </div>
+
+   <div class="col-2">
+         Жанр
+    </div>
+   <div class="col-1">
+         Читают
+    </div>
+   <div class="col-1">
+         В наличии
+    </div>
+</div>
+</div><br>
+
+<div class='container' id="lg">
+    {% for book in object_list %}
+       <div class="row">
+           <div class="col-3">
+                {{ book.title }}
             </div>
-       </div>
-       <div class="col-1">
-            <div class="row">
-                <a href="#">Изменить количество</a>
+
+           <div class="col-3">
+                {{ book.book_author }}
             </div>
-       </div>
-   </div>
-{% endfor %}
+
+           <div class="col-2">
+                 {{ book.book_genre }}
+            </div>
+           <div class="col-1">
+                 {{ book.reading_set.all.count }}
+            </div>
+           <div class="col-1">
+                 {{ book.available_count }}
+            </div>
+           <div class="col-1">
+           {% if book.available_count %}
+           <a href="{% url 'correct_book' book.slug %}" class="btn btn-outline-dark btn-sm"" role="button" data-bs-toggle="button">Редактировать</a>
+               
+           {% else %}
+                Нет в наличии
+           {% endif %}
+           </div>
+
+        </div><br>
+    {% endfor %}
+</div>
 {% endblock %}

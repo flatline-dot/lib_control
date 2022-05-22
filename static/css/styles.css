@@ -35,6 +35,10 @@
 }
 
 
+.col-12{
+    text-align: center;
+}
+
 #search{
     width: 700px;
     margin-top: 60px;
@@ -76,9 +80,35 @@
 
 #reader-data{
     width: 900px;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 17px;
     margin-top: 20px;
     max-width: 1500px;
     margin: 0 auto, 0;
+}
+
+#submit{
+    width: 600px;
+    height: 200px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    margin: 0, auto,;
+    margin-top: 250px;
+    border-width: 5px;
+    border: 2px solid rgb(190, 183, 183);
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    background-color: rgb(246, 243, 241);
+
+}
+
+#create_book{
+    width: 700px;
+    height: 500px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    margin: 0 auto;
+    margin-top: 100px;
+    font-weight: bold;
 }

@@ -4,8 +4,8 @@ from django.forms import PasswordInput, CharField
 
 
 class CreateUser(UserCreationForm):
-    password1 = CharField(label=("Password"), widget=PasswordInput(attrs={'class': 'form-input'}))
-    password2 = CharField(label=("Password confirm"), widget=PasswordInput(attrs={'class': 'form-input'}))
+    password1 = CharField(label=("Пароль"), widget=PasswordInput(attrs={'class': 'form-input'}))
+    password2 = CharField(label=("Подтверждение пароля"), widget=PasswordInput(attrs={'class': 'form-input'}))
 
     class Meta:
         model = User

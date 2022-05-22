@@ -6,7 +6,7 @@ from django.urls import reverse
 
 
 class Author(models.Model):
-    author_book = models.CharField(max_length=50, unique=True)
+    author_book = models.CharField(max_length=50, unique=True, verbose_name='Автор')
     slug = models.SlugField(max_length=50, allow_unicode=True, blank=True, unique=True, null=False)
 
     def __str__(self):
@@ -17,7 +17,7 @@ class Author(models.Model):
 
 
 class Genre(models.Model):
-    genre_book = models.CharField(max_length=50, unique=True)
+    genre_book = models.CharField(max_length=50, unique=True, verbose_name='Жанр')
     slug = models.SlugField(max_length=50, allow_unicode=True, blank=True, unique=True, null=False)
 
     def __str__(self):
@@ -28,10 +28,10 @@ class Genre(models.Model):
 
 
 class Book(models.Model):
-    title = models.CharField(max_length=50, unique=True)
-    book_author = models.ForeignKey(Author, on_delete=models.CASCADE, null=False)
-    book_genre = models.ForeignKey(Genre, on_delete=models.CASCADE, null=False)
-    book_amount = models.IntegerField()
+    title = models.CharField(max_length=50, unique=True, verbose_name='Название')
+    book_author = models.ForeignKey(Author, on_delete=models.CASCADE, null=False, verbose_name='Автор')
+    book_genre = models.ForeignKey(Genre, on_delete=models.CASCADE, null=False, verbose_name='Жанр')
+    book_amount = models.IntegerField(verbose_name='Количество')
     slug = models.SlugField(max_length=50, allow_unicode=True, blank=True, unique=True, null=False)
 
     def available_count(self):
