@@ -25,11 +25,12 @@
 <div class="container" id="user_list">
     <div class="list-group">
         {% for user in object_list %}
-        <a href="{% url 'confirm' book user.pk %}" class="list-group-item list-group-item-action list-group-item-light">{{ user.first_name }} {{ user.last_name }}</a> 
+            <a href="{% url 'confirm' book user.pk %}" class="list-group-item list-group-item-action list-group-item-light">{{ user.first_name }} {{ user.last_name }}</a><br>
+        {% endfor %} 
     </div>
 
 
-    {% endfor %}
+    
 </div>
 
 {% endblock %}

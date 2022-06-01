@@ -28,12 +28,12 @@
         
         {% for user in object_list %}
         
-        <a href="{% url 'reader_card' user.pk %}" class="list-group-item list-group-item-action list-group-item-light">{{ user.first_name }} {{ user.last_name }}</a>   
-
+        <a href="{% url 'reader_card' user.pk %}" class="list-group-item list-group-item-action list-group-item-light">{{ user.first_name }} {{ user.last_name }}</a> <br>  
+        {% endfor %}
     </div>
 
 
-    {% endfor %}
+    
 </div>
 
 
