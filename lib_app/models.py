@@ -2,7 +2,7 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.urls import reverse
+# from django.urls import reverse
 
 
 class Author(models.Model):
@@ -29,8 +29,8 @@ class Genre(models.Model):
 
 class Book(models.Model):
     title = models.CharField(max_length=80, unique=True, verbose_name='Название')
-    book_author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Автор')
-    book_genre = models.ForeignKey(Genre, on_delete=models.CASCADE, verbose_name='Жанр')
+    book_author = models.ForeignKey(Author, on_delete=models.CASCADE, max_length=80, verbose_name='Автор')
+    book_genre = models.ForeignKey(Genre, on_delete=models.CASCADE, max_length=80, verbose_name='Жанр')
     book_amount = models.IntegerField(verbose_name='Количество')
     slug = models.SlugField(max_length=80, allow_unicode=True, unique=True)
 
@@ -40,8 +40,8 @@ class Book(models.Model):
     def __str__(self):
         return f'{self.title}-{self.book_author}'
 
-    def get_absolute_url(self):
-        return reverse('correct_book', kwargs={'pk': self.pk})
+    # def get_absolute_url(self):
+    #     return reverse('correct_book', kwargs={'pk': self.pk})
 
     class Meta:
         ordering = ['title']
@@ -67,7 +67,7 @@ class Fine(models.Model):
     pay_date = models.DateField(null=True, auto_now=True)
 
     def __str__(self):
-        return f'{self.user_id}, {self.reading_id}, Оплачен: {self.pay_status}'
+        return f'{self.reading_id}, Оплачен: {self.pay_status}'
 
     class Meta:
         unique_together = ['user_id', 'reading_id']
