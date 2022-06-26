@@ -1,19 +1,19 @@
-# Book managment system
+### Book managment system
 Service allows you to control the movement of books in library. There are roles such as Manager and Reader. Implemented system of fines.<br>
 
 
-# Installation on Windows
+#### Installation on Windows
  ````python
  git clone https://github.com/flatline-dot/lib_control
  python -m venv env
  env\Scripts\activate
  pip install -r requirements.txt
  ````
-# Run
+#### Run
  ````python
  python manage.py runsever
  ````
- # Installation on Linux
+ #### Installation on Linux
   ````python
  git clone https://github.com/flatline-dot/lib_control
  sudo apt-get install python3-pip
@@ -22,10 +22,10 @@ Service allows you to control the movement of books in library. There are roles 
  source env/bin/activate
  pip install -r requirements.txt
  ````
-# Run with system of fines
+#### Run with system of fines
  ````python
  sudo service redis-server start
- python manage.py runsever
+ python3 manage.py runsever
  celery -A lib_control beat -l INFO
  celery -A lib_control worker -l INFO
  ````
