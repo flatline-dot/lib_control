@@ -8,7 +8,6 @@ Service allows you to control the movement of books in library. There are roles 
  python -m venv env
  env\Scripts\activate
  pip install -r requirements.txt
- python manage.py migreate
  ````
 ## Run
  ````python
