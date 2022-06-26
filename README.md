@@ -1,3 +1,1 @@
-# lib_control
-Система контроля библиотеки.
-Находится в разработке.
+# Book managment system
