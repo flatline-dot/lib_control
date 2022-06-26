@@ -81,12 +81,8 @@ WSGI_APPLICATION = 'lib_control.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lib_control',
-        'USER': 'postgres',
-        'PASSWORD': '123',
-        "HOST": 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(BASE_DIR) + '\sqlite.db'
     }
 }
 
