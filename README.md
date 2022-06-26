@@ -29,3 +29,5 @@ Service allows you to control the movement of books in library. There are roles 
  celery -A lib_control beat -l INFO
  celery -A lib_control worker -l INFO
  ````
+
+<br>![view](https://user-images.githubusercontent.com/76453758/175833304-03a82510-8237-472a-869f-839943776cf9.jpg)
