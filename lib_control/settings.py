@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'lib_control.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR) + '\sqlite.db'
+        'NAME': os.path.join(BASE_DIR, "sqlite.db")
     }
 }
-
+print(BASE_DIR)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
