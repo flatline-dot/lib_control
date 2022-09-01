@@ -8,7 +8,7 @@ from django.db import IntegrityError, transaction
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lib_control.settings')
 
-app = Celery('lib_control', broker='redis://localhost//')
+app = Celery('lib_control', broker='redis://redis:6379')
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 

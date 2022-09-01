@@ -1,5 +1,5 @@
 import datetime
-
+import time
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
@@ -39,6 +39,7 @@ class AllBooks(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'lib_app/all_books.html'
 
     def get_queryset(self):
+        time.sleep(10)
         queryset = True
         if self.request.GET.get('search_query') and self.request.GET.get('search_select'):
             field_ = make_queries[self.request.GET.get('search_select')]

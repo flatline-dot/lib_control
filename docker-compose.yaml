@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - HOST=db
+    depends_on:
+      - db
+
+  redis:
+    image: redis:alpine
+
+  celery:
+    build: .
+    command: celery -A lib_control worker -l info
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - HOST=db
+    depends_on: 
+      - db
+      - redis
+  
+  celery-beat:
+    build: .
+    command: celery -A lib_control beat -l info
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - HOST=db
+    depends_on:
+      - db
+      - redis
